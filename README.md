@@ -1,422 +1,203 @@
-# Embedded-Water-Reminder-System
-A smart embedded water-drinking reminder system designed to encourage regular hydration. The project uses a microcontroller-based approach with user input, display, RTC and reminder functionality to provide timely drinking alerts and demonstrate practical Embedded C and microcontroller interfacing.
-# 💧 AquaGuardian – Smart Water Drinking Reminder System
+# AquaGuardian: Smart Water Drinking Reminder System
 
-AquaGuardian is an embedded-based **Smart Water Drinking Reminder System** designed to help users maintain regular hydration by providing timely reminders to drink water.
-
-The system uses an **ARM7 microcontroller**, **Real-Time Clock (RTC)**, **16×2 LCD**, **4×4 matrix keypad**, **buzzer**, and **interrupt mechanism** to monitor time and generate scheduled drinking reminders.
-
----
-
-## 📌 Project Overview
-
-Maintaining proper hydration is important for overall health, but people often forget to drink water regularly due to busy schedules.
-
-AquaGuardian addresses this problem by providing an automated reminder system. The user can configure the required reminder settings through the keypad, while the RTC keeps track of the current time.
-
-When the configured reminder time is reached, the system activates the buzzer and displays a notification on the LCD, reminding the user to drink water.
-
----
+AquaGuardian is an embedded-based **Smart Water Drinking Reminder System** designed to remind users to drink water at regular intervals. The system uses an **ARM7 LPC2148 microcontroller**, **RTC**, **16×2 LCD**, **4×4 keypad**, **switch**, **drink button**, **LED indicators**, **buzzer**, and **interrupts** to provide scheduled hydration reminders and track daily water intake.
 
 ## 🎯 Objectives
 
-* Develop an automated water-drinking reminder system.
-* Provide reminders at predefined time intervals.
-* Maintain accurate time using an RTC.
-* Provide a simple user interface using a keypad and LCD.
-* Generate an audible alert using a buzzer.
-* Use interrupts for efficient event handling.
-* Implement the system using embedded C and ARM7 microcontroller peripherals.
-
----
+- Display the current date and time obtained from the RTC on the LCD.
+- Generate automatic reminders for drinking water at scheduled intervals.
+- Allow the user to record each glass of water consumed using the drink button.
+- Maintain a configurable daily water-intake goal.
+- Continuously compare the RTC time with the configured reminder interval.
+- Display the number of glasses consumed and the remaining daily target on the LCD.
+- Provide LED indications for hydration status.
+- Generate a buzzer alert when it is time to drink water.
+- Reset the daily water-intake record at midnight using the RTC.
 
 ## ✨ Features
 
-* ⏰ Real-time clock-based operation
-* 💧 Scheduled water-drinking reminders
-* 📟 16×2 LCD display
-* 🔢 4×4 matrix keypad for user input
-* 🔔 Buzzer-based reminder notification
-* ⚡ Interrupt-based event handling
-* 🕐 Accurate time tracking using RTC
-* 👤 Simple and user-friendly interface
-* 🔧 Modular embedded C implementation
+- RTC-based real-time monitoring
+- Automatic drinking reminders
+- 16×2 LCD display
+- 4×4 matrix keypad for user input
+- Drink-button based intake recording
+- Green, yellow, and red LED status indication
+- Buzzer alert
+- Interrupt-based input handling
+- Daily hydration target tracking
+- Automatic midnight reset
 
----
+## 🧱 Block Diagram
 
-## 🧩 System Components
+![AquaGuardian Block Diagram](block_diagram.jpg)
 
-### Hardware Components
+### Block Diagram Description
 
-| Component            | Purpose                                      |
-| -------------------- | -------------------------------------------- |
-| ARM7 Microcontroller | Main controller of the system                |
-| RTC                  | Maintains current date and time              |
-| 16×2 LCD             | Displays time, status, and reminder messages |
-| 4×4 Matrix Keypad    | Allows user interaction and configuration    |
-| Buzzer               | Provides audible reminder alerts             |
-| Push Button / Switch | Provides additional user control             |
-| Power Supply         | Provides power to the system                 |
+The **LPC2148 ARM7 microcontroller** is the central controller of the system.
 
----
+**Inputs:**
+- **Keypad** – used for user input/configuration.
+- **Switch** – connected through an external interrupt for user control.
+- **Drink Button** – records water consumption through an interrupt.
+- **RTC** – provides the current date and time.
 
-## 🖥️ Software Requirements
-
-* Embedded C
-* Keil µVision
-* ARM7/LPC21xx development environment
-* Suitable ARM7 compiler
-* Flash/programming utility for the target microcontroller
-
----
-
-## 🏗️ System Architecture
-
-```text
-                 ┌───────────────────┐
-                 │   ARM7 MCU        │
-                 │   / LPC21xx       │
-                 └─────────┬─────────┘
-                           │
-          ┌────────────────┼────────────────┐
-          │                │                │
-          ▼                ▼                ▼
-     ┌─────────┐      ┌─────────┐      ┌─────────┐
-     │   RTC   │      │   LCD   │      │ Keypad  │
-     └─────────┘      └─────────┘      └─────────┘
-          │                │                │
-          │                │                │
-          └────────────────┼────────────────┘
-                           │
-                           ▼
-                      ┌─────────┐
-                      │ Buzzer  │
-                      └─────────┘
-```
-
----
+**Outputs:**
+- **LCD** – displays time, reminder information, glasses consumed, and remaining target.
+- **Green LED** – indicates a healthy/achieved hydration status.
+- **Yellow LED** – indicates an intermediate/reminder status.
+- **Red LED** – indicates a low/attention status.
+- **Buzzer** – provides an audible drinking reminder.
 
 ## ⚙️ Working Principle
 
-The AquaGuardian system operates according to the following sequence:
+1. On power-up, the LPC2148 initializes the RTC, LCD, keypad, GPIO, buzzer, LEDs, and interrupt configuration.
+2. The RTC continuously maintains the current date and time.
+3. The microcontroller reads the RTC and compares the current time with the configured drinking-reminder interval.
+4. When the reminder time is reached, the buzzer is activated and the LCD displays the reminder.
+5. The user presses the **Drink Button** after drinking water.
+6. The microcontroller increments the consumed-glass count and updates the remaining daily target.
+7. LEDs indicate the current hydration status.
+8. At midnight, the daily water-intake count is automatically reset.
+9. The system then continues monitoring the next day's hydration schedule.
 
-### 1. System Initialization
+## 🔩 Hardware Requirements
 
-When the system is powered ON, the microcontroller initializes:
+| Component | Purpose |
+|---|---|
+| LPC2148 ARM7 Microcontroller | Main controller |
+| RTC | Maintains date and time |
+| 16×2 LCD | Displays system information |
+| 4×4 Matrix Keypad | User input/configuration |
+| Switch | User control / interrupt input |
+| Drink Button | Records water consumption |
+| Green LED | Hydration status indication |
+| Yellow LED | Hydration/reminder indication |
+| Red LED | Low/attention indication |
+| Buzzer | Audible reminder |
+| Power Supply | Powers the system |
 
-* LCD
-* RTC
-* Keypad
-* Buzzer
-* Interrupt system
+## 💻 Software Requirements
 
-### 2. Time Monitoring
+- Embedded C
+- Keil µVision
+- ARM7/LPC21xx development environment
+- ARM7 compiler
+- Flash/programming utility
 
-The RTC continuously maintains the current time.
+## 🧩 Software Modules
 
-The microcontroller periodically reads the RTC values and compares them with the configured reminder time.
+| Module | Function |
+|---|---|
+| `main.c` | Main program and overall system flow |
+| `aquaguardian.c` | AquaGuardian application logic |
+| `aquaguardian.h` | Application declarations |
+| `rtc-1.c` | RTC handling |
+| `rtc.h` | RTC definitions |
+| `lcd (1).c` | LCD interfacing |
+| `lcd.h` | LCD declarations |
+| `kpm-1.c` | Keypad interfacing |
+| `kpm.h` | Keypad declarations |
+| `interrupt-1.c` | Interrupt handling |
+| `delay (1).c` | Delay functions |
+| `types (1).h` | User-defined data types |
 
-### 3. User Configuration
+## 🔌 Embedded Concepts Used
 
-The keypad allows the user to enter or configure the required settings.
+- ARM7 LPC2148 microcontroller
+- Embedded C
+- GPIO programming
+- RTC interfacing
+- LCD interfacing
+- Matrix keypad interfacing
+- External interrupts
+- LED control
+- Buzzer control
+- Real-time event monitoring
+- Modular programming
 
-The LCD provides visual feedback while the user interacts with the system.
+## 📊 Hydration Status
 
-### 4. Reminder Detection
+The LED indicators can be used to represent different hydration conditions:
 
-The microcontroller continuously checks whether the current RTC time matches the configured reminder condition.
+| Indicator | Status |
+|---|---|
+| 🟢 Green LED | Healthy / target achieved |
+| 🟡 Yellow LED | Reminder / intermediate status |
+| 🔴 Red LED | Low hydration / attention required |
 
-### 5. Reminder Alert
+> The exact status conditions depend on the thresholds implemented in the project firmware.
 
-When the reminder condition is satisfied:
+## 🧪 Testing
 
-* The buzzer is activated.
-* The LCD displays the appropriate reminder message.
-* The user is alerted to drink water.
+| Test Case | Expected Result |
+|---|---|
+| Power ON | Peripherals initialize |
+| RTC check | Current date/time is available |
+| Keypad input | User input is detected |
+| Reminder time reached | Buzzer alert is generated |
+| Drink button pressed | Consumed-glass count increases |
+| LCD update | Current status and target are displayed |
+| LED status update | Appropriate LED is activated |
+| Midnight reached | Daily intake count resets |
 
-### 6. Continue Monitoring
+## 🚀 Setup
 
-After the reminder event is handled, the system returns to monitoring the RTC and waits for the next reminder.
+1. Clone or download this repository.
+2. Open the project in **Keil µVision**.
+3. Select the appropriate **LPC2148/ARM7** target.
+4. Add all required `.c` and `.h` files to the project.
+5. Configure the target and compiler settings according to the development board.
+6. Build the project.
+7. Program the generated binary/HEX file into the LPC2148 board.
+8. Connect the RTC, LCD, keypad, buttons, LEDs, and buzzer according to the hardware design.
+9. Power the board and configure the required reminder settings.
 
----
+## 🔮 Future Enhancements
 
-## 🔄 Program Flow
+- Mobile application connectivity
+- Bluetooth/Wi-Fi monitoring
+- Automatic water-flow or quantity measurement
+- Daily and weekly hydration statistics
+- Cloud-based data storage
+- Custom reminder schedules
+- Battery-powered operation
+- Personalized hydration targets
+
+## 📚 Learning Outcomes
+
+This project provides practical experience in:
+
+- Embedded C programming
+- ARM7/LPC2148 peripheral programming
+- RTC and LCD interfacing
+- Keypad interfacing
+- External interrupt programming
+- GPIO control
+- Modular embedded software development
+- Hardware-software integration
+- Real-time system design and debugging
+
+## 📁 Repository Structure
 
 ```text
-              START
-                │
-                ▼
-       Initialize Peripherals
-                │
-                ▼
-          Initialize RTC
-                │
-                ▼
-         Initialize LCD
-                │
-                ▼
-        Initialize Keypad
-                │
-                ▼
-       Configure Interrupts
-                │
-                ▼
-        Read Current Time
-                │
-                ▼
-    Compare With Reminder Time
-                │
-          ┌─────┴─────┐
-          │           │
-         NO          YES
-          │           │
-          │           ▼
-          │      Activate Buzzer
-          │           │
-          │           ▼
-          │      Display Reminder
-          │           │
-          │           ▼
-          └──────► Continue
-                   Monitoring
-```
-
----
-
-## 📁 Project Structure
-
-```text
-Aquaguardian-Smart-Water-Drinking-Reminder-System/
+AquaGuardian-Smart-Water-Drinking-Reminder-System/
+│
+├── README.md
+├── block_diagram.jpg
 │
 ├── main.c
 ├── aquaguardian.c
 ├── aquaguardian.h
-│
 ├── rtc-1.c
 ├── rtc.h
-│
 ├── lcd (1).c
 ├── lcd.h
-│
 ├── kpm-1.c
 ├── kpm.h
-│
 ├── interrupt-1.c
 ├── delay (1).c
-├── types (1).h
-│
-└── README.md
+└── types (1).h
 ```
-
----
-
-## 🔧 Software Modules
-
-### `main.c`
-
-Contains the main program and controls the overall execution of the system.
-
-### `aquaguardian.c`
-
-Contains the main AquaGuardian application logic and reminder functionality.
-
-### `aquaguardian.h`
-
-Contains declarations and definitions associated with the AquaGuardian application.
-
-### `rtc-1.c`
-
-Handles RTC initialization and time/date-related operations.
-
-### `rtc.h`
-
-Contains RTC-related declarations and definitions.
-
-### `lcd (1).c`
-
-Provides functions for interfacing with the 16×2 LCD.
-
-### `lcd.h`
-
-Contains LCD function declarations and related definitions.
-
-### `kpm-1.c`
-
-Handles interfacing with the matrix keypad and reading user input.
-
-### `kpm.h`
-
-Contains keypad-related declarations and definitions.
-
-### `interrupt-1.c`
-
-Contains interrupt configuration and interrupt-handling functionality.
-
-### `delay (1).c`
-
-Provides delay functions required by different peripherals.
-
-### `types (1).h`
-
-Contains user-defined data types used throughout the project.
-
----
-
-## 🧠 Key Embedded Concepts Used
-
-This project demonstrates several important embedded-system concepts:
-
-* ARM7 microcontroller programming
-* Embedded C programming
-* GPIO programming
-* RTC interfacing
-* LCD interfacing
-* Matrix keypad interfacing
-* Buzzer control
-* Interrupt programming
-* Peripheral initialization
-* Modular programming
-* Real-time event monitoring
-* Hardware-software integration
-
----
-
-## 🚀 Installation and Setup
-
-### Step 1 – Clone the Repository
-
-```bash
-git clone https://github.com/<your-username>/Aquaguardian-Smart-Water-Drinking-Reminder-System.git
-```
-
-### Step 2 – Open the Project
-
-Open the project in the appropriate ARM7 development environment such as **Keil µVision**.
-
-### Step 3 – Add Source Files
-
-Make sure all `.c` and `.h` files are included in the project.
-
-### Step 4 – Configure the Target
-
-Select the appropriate ARM7/LPC21xx target device and configure the required compiler and target settings.
-
-### Step 5 – Build the Project
-
-Compile the project and resolve any compiler or linker errors.
-
-### Step 6 – Program the Microcontroller
-
-Download the generated program into the target ARM7 development board using the appropriate programming/debugging interface.
-
----
-
-## 🧪 Testing
-
-The system can be tested using the following conditions:
-
-| Test                       | Expected Result                     |
-| -------------------------- | ----------------------------------- |
-| Power ON                   | System initializes successfully     |
-| RTC initialized            | Current time is displayed/available |
-| Keypad input               | User input is detected              |
-| Reminder condition reached | Buzzer is activated                 |
-| Reminder triggered         | LCD displays notification           |
-| Next reminder interval     | System continues monitoring         |
-
----
-
-## 📊 Advantages
-
-* Simple and easy to operate
-* Provides automatic hydration reminders
-* Uses accurate RTC-based timing
-* Low-cost embedded implementation
-* Provides both visual and audible notifications
-* Demonstrates practical embedded-system concepts
-* Modular software structure makes development easier
-
----
-
-## ⚠️ Limitations
-
-* Reminder functionality depends on the configured time settings.
-* The system requires a continuous power supply.
-* The basic system does not automatically measure the amount of water consumed.
-* It does not automatically determine an individual's ideal daily water requirement.
-* Hardware configuration may need to be modified for different ARM7 boards.
-
----
-
-## 🔮 Future Enhancements
-
-The system can be extended with additional features such as:
-
-* 📱 Mobile application connectivity
-* 📡 Bluetooth/Wi-Fi connectivity
-* 📊 Daily and weekly hydration statistics
-* 💧 Water-level or flow sensing
-* 🔔 Customizable reminder intervals
-* 🔋 Battery-powered operation
-* ☁️ Cloud-based data storage
-* 📈 Hydration monitoring dashboard
-* 👤 Personalized reminder schedules
-* 🔊 Voice-based reminders
-
----
-
-## 🎓 Applications
-
-AquaGuardian can be useful for:
-
-* Students
-* Office workers
-* Elderly people
-* People with busy schedules
-* Home users
-* Workplace environments
-* General hydration-awareness applications
-
----
-
-## 🛠️ Technologies Used
-
-**Programming Language**
-
-* Embedded C
-
-**Microcontroller**
-
-* ARM7 / LPC21xx
-
-**Development Environment**
-
-* Keil µVision
-
-**Interfaces**
-
-* GPIO
-* RTC
-* LCD
-* Matrix Keypad
-* Interrupts
-
----
-
-## 📚 Learning Outcomes
-
-Through this project, the following practical skills can be developed:
-
-* Understanding ARM7 architecture and peripherals
-* Writing embedded C programs
-* Interfacing external hardware with a microcontroller
-* Working with RTC-based applications
-* Implementing LCD and keypad drivers
-* Understanding interrupt-driven programming
-* Designing modular embedded software
-* Debugging hardware and software integration issues
-
----
 
 ## 👩‍💻 Author
 
@@ -426,22 +207,10 @@ Embedded Systems | ARM7 | Embedded C
 
 GitHub: `https://github.com/<your-username>`
 
----
-
 ## 📜 License
 
-This project is intended for educational and learning purposes.
-
-You may modify and extend the project for academic and personal learning applications.
+This project is intended for educational and learning purposes. You may modify and extend it for academic and personal projects, subject to the repository's applicable license terms.
 
 ---
 
-## ⭐ Acknowledgement
-
-This project was developed as an embedded-systems project to demonstrate the integration of a microcontroller with RTC, LCD, keypad, buzzer, and interrupt-based peripherals to create a practical real-time reminder system.
-
----
-
-## ⭐ If You Find This Project Useful
-
-Consider giving the repository a ⭐ on GitHub and feel free to improve the project with additional embedded features.
+**AquaGuardian — Smart Water Drinking Reminder System | ARM7 Embedded Project**
